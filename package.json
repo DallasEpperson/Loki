@@ -4,8 +4,7 @@
   "description": "Loki is a tool to help me keep track of all my physical things",
   "main": "main.js",
   "scripts": {
-    "start": "electron .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "electron ."
   },
   "repository": {
     "type": "git",
