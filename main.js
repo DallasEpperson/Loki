@@ -5,9 +5,9 @@ const AppDataStore = require('./AppDataStore');
 const path = require('path');
 const Window = require('./Window');
 
-const appData = new AppDataStore({name: 'Loki'});
+const appData = new AppDataStore({ name: 'Loki' });
 
-function main(){
+function main() {
     //todo get window size from last invocation
     let mainWindow = new Window({
         file: path.join('renderer', 'index.html')
@@ -17,14 +17,15 @@ function main(){
         mainWindow.webContents.send('previouslyOpened', appData.getPreviouslyOpened());
     });
 
-    ipcMain.on('file-open-click', ()=> {
+    ipcMain.on('file-open-click', () => {
         console.log('file-open-click handler on main thread');
         let openDiagResponse = dialog.showOpenDialogSync(mainWindow, {
             title: 'Open existing Loki file',
             filters: [
-                {name: 'Loki File', extensions: ['loki']}
+                { name: 'Loki File', extensions: ['loki'] }
             ],
-            properties: ['openFile']});
+            properties: ['openFile']
+        });
         console.log('dialog returned with', openDiagResponse);
         //todo if undefined, return
         //  if array && length>0, open first file in array.

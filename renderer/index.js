@@ -1,6 +1,6 @@
 'use strict';
 
-const {ipcRenderer} = require('electron');
+const { ipcRenderer } = require('electron');
 
 ipcRenderer.on('previouslyOpened', (event, previouslyOpened) => {
     console.log('Received previouslyOpened event', previouslyOpened);

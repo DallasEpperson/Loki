@@ -1,9 +1,9 @@
 const Store = require('electron-store');
 
 class AppDataStore extends Store {
-    constructor (settings){
+    constructor(settings) {
         super(settings);
-        
+
         //get from app data file or initialize with defaults
         this.previouslyOpened = this.get('previouslyOpened') || [];
     }
@@ -11,20 +11,20 @@ class AppDataStore extends Store {
     /**
      * @returns {[string]} Array of previously opened files
      */
-    getPreviouslyOpened(){
+    getPreviouslyOpened() {
         return this.previouslyOpened;
     }
 
-    savePreviouslyOpened(){
+    savePreviouslyOpened() {
         this.set('previouslyOpened', this.previouslyOpened);
     }
 
-    addPreviouslyOpened(fileLoc){
+    addPreviouslyOpened(fileLoc) {
         this.previouslyOpened = [fileLoc, ...this.previouslyOpened];
         this.savePreviouslyOpened();
     }
 
-    save(){
+    save() {
         console.log('Saving app data');
         this.savePreviouslyOpened();
     }

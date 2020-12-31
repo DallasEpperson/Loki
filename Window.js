@@ -1,6 +1,6 @@
 'use strict';
 
-const {BrowserWindow} = require('electron');
+const { BrowserWindow } = require('electron');
 
 const defaultProps = {
     width: 500,
@@ -12,8 +12,8 @@ const defaultProps = {
 };
 
 class Window extends BrowserWindow {
-    constructor({file, ...windowSettings}){
-        super({ ...defaultProps, ...windowSettings});
+    constructor({ file, ...windowSettings }) {
+        super({ ...defaultProps, ...windowSettings });
 
         this.loadFile(file);
         this.webContents.openDevTools(); //TODO depperson remove
