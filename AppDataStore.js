@@ -20,6 +20,8 @@ class AppDataStore extends Store {
     }
 
     addPreviouslyOpened(fileLoc) {
+        //TODO if fileLoc exists in array, remove from array and prepend
+        //TODO cull to max size of ?5?
         this.previouslyOpened = [fileLoc, ...this.previouslyOpened];
         this.savePreviouslyOpened();
     }
