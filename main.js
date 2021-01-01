@@ -2,6 +2,7 @@
 
 const { app, dialog, ipcMain } = require('electron');
 const AppDataStore = require('./AppDataStore');
+const LokiFile = require('./LokiFile');
 const path = require('path');
 const Window = require('./Window');
 
@@ -15,6 +16,27 @@ function main() {
 
     mainWindow.once('show', () => { //TODO investigate ready-to-show
         mainWindow.webContents.send('previouslyOpened', appData.getPreviouslyOpened());
+    });
+
+    ipcMain.on('file-new-click', () => {
+        console.log('file-new-click handler on main thread');
+        let chosenNewFileLoc = dialog.showSaveDialogSync(mainWindow, {
+            title: 'Save Loki file',
+            filters: [
+                { name: 'Loki File', extensions: ['loki'] }
+            ]
+        });
+        console.log('dialog returned with', chosenNewFileLoc);
+        if(!chosenNewFileLoc) return;
+
+        let ext = path.extname(chosenNewFileLoc);
+        if (!ext) chosenNewFileLoc += '.loki';
+        let lokiFile = new LokiFile(chosenNewFileLoc);
+        lokiFile.init().then(function(){
+            console.log('main thread past loki file creation');
+            appData.addPreviouslyOpened(chosenNewFileLoc);
+            //TODO open & render
+        });
     });
 
     ipcMain.on('file-open-click', () => {

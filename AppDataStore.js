@@ -20,7 +20,12 @@ class AppDataStore extends Store {
     }
 
     addPreviouslyOpened(fileLoc) {
-        this.previouslyOpened = [fileLoc, ...this.previouslyOpened];
+        const maxPreviouslyOpened = 5; //TODO make this a config
+        let arrayPos = this.previouslyOpened.indexOf(fileLoc)
+        if (arrayPos > -1) {
+            this.previouslyOpened.splice(arrayPos, 1);
+        }
+        this.previouslyOpened = [fileLoc, ...this.previouslyOpened].slice(0, maxPreviouslyOpened);
         this.savePreviouslyOpened();
     }
 
