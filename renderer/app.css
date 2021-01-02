@@ -1,0 +1,68 @@
+:root {
+    --main-bg-color: #222328;
+    --text-primary-color: #FFF;
+    --text-secondary-color: #C7C7C9;
+    --text-tertiary-color: #86888E;
+    --text-link-color: #7DC0EA;
+    --button-hover-color: #292C3E;
+    --button-border-color: #3A3D4D;
+}
+
+body {
+    background-color: var(--main-bg-color);
+}
+
+h1 {
+    color: var(--text-primary-color);
+}
+
+h2 {
+    color: var(--text-secondary-color);
+}
+
+#file-buttons {
+    zborder: 1px solid red;
+    width: 15em;
+}
+
+#file-buttons button {
+    background-color: var(--main-bg-color);
+    color: var(--text-secondary-color);
+    border: 1px solid var(--button-border-color);
+    font-size: 1rem;
+    width: 100%;
+    margin-bottom: 0.5em;
+}
+
+#file-buttons button:hover {
+    background-color: var(--button-hover-color);
+    color: var(--text-primary-color);
+}
+
+#file-operations {
+    display: flex;
+}
+
+#recent-files h2 {
+    margin: 0;
+}
+
+#recent-file-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+#recent-file-list a {
+    color: var(--text-link-color);
+}
+
+#recent-file-list a:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+#recent-file-list span {
+    color: var(--text-secondary-color);
+    padding-left: 0.75em;
+}

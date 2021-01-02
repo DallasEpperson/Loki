@@ -10,17 +10,19 @@ const appData = new AppDataStore({ name: 'Loki' });
 
 function main() {
     //todo get window size from last invocation
-    let mainWindow = new Window({
-        file: path.join('renderer', 'index.html')
+    let menuWindow = new Window({
+        file: path.join('renderer', 'menu.html'),
+        width: 800,
+        height: 600
     });
 
-    mainWindow.once('show', () => { //TODO investigate ready-to-show
-        mainWindow.webContents.send('previouslyOpened', appData.getPreviouslyOpened());
+    menuWindow.once('show', () => { //TODO investigate ready-to-show
+        menuWindow.webContents.send('previouslyOpened', appData.getPreviouslyOpened());
     });
 
     ipcMain.on('file-new-click', () => {
         console.log('file-new-click handler on main thread');
-        let chosenNewFileLoc = dialog.showSaveDialogSync(mainWindow, {
+        let chosenNewFileLoc = dialog.showSaveDialogSync(menuWindow, {
             title: 'Save Loki file',
             filters: [
                 { name: 'Loki File', extensions: ['loki'] }
@@ -41,7 +43,7 @@ function main() {
 
     ipcMain.on('file-open-click', () => {
         console.log('file-open-click handler on main thread');
-        let openDiagResponse = dialog.showOpenDialogSync(mainWindow, {
+        let openDiagResponse = dialog.showOpenDialogSync(menuWindow, {
             title: 'Open existing Loki file',
             filters: [
                 { name: 'Loki File', extensions: ['loki'] }
@@ -58,6 +60,7 @@ function main() {
 app.on('ready', main);
 
 app.on('window-all-closed', () => {
+    console.log('All windows closed - exiting.');
     appData.save();
     app.quit();
 });
