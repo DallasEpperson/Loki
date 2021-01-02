@@ -13,8 +13,12 @@ function main() {
     let menuWindow = new Window({
         file: path.join('renderer', 'menu.html'),
         width: 800,
-        height: 600
+        height: 600,
+        minWidth: 300,
+        minHeight: 200
     });
+
+    menuWindow.removeMenu();
 
     menuWindow.once('show', () => { //TODO investigate ready-to-show
         menuWindow.webContents.send('previouslyOpened', appData.getPreviouslyOpened());
@@ -54,6 +58,10 @@ function main() {
         //todo if undefined, return
         //  if array && length>0, open first file in array.
         //  if successfully opened, add to appData.
+    });
+
+    ipcMain.on('exit-click', () => {
+        menuWindow.close();
     });
 };
 
