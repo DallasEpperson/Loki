@@ -20,11 +20,9 @@ function main() {
 
     menuWindow.removeMenu();
 
-    menuWindow.once('show', () => { //TODO investigate ready-to-show
+    menuWindow.once('ready-to-show', () => {
         menuWindow.webContents.send('previouslyOpened', appData.getPreviouslyOpened());
     });
-
-    //menuWindow.webContents.openDevTools(); //todo remove
 
     ipcMain.on('file-new-click', () => {
         console.log('file-new-click handler on main thread');
