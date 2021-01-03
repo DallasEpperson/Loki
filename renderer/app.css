@@ -14,6 +14,10 @@ body {
     background-color: var(--main-bg-color);
 }
 
+h1, h2 {
+    user-select: none;
+}
+
 h1 {
     color: var(--text-primary-color);
 }
@@ -23,13 +27,12 @@ h2 {
 }
 
 #file-buttons {
-    zborder: 1px solid red;
-    width: 15em;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
 }
 
 #file-buttons .button {
-    display: inline-block;
-    width: 100%;
     background-color: var(--main-bg-color);
     color: var(--text-secondary-color);
     border: 1px solid var(--button-border-color);
@@ -37,11 +40,16 @@ h2 {
     margin-bottom: 0.5em;
     padding: 0.5em 1em;
     text-align: left;
+    user-select: none;
 }
 
 #file-buttons .button:hover {
     background-color: var(--button-hover-color);
     color: var(--text-primary-color);
+}
+
+#file-buttons .button i {
+    padding-right: 0.5em;
 }
 
 #file-operations {
@@ -50,6 +58,7 @@ h2 {
 
 #recent-files {
     padding-left: 1em;
+    overflow: hidden;
 }
 
 #recent-files h2 {
