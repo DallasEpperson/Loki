@@ -22,7 +22,27 @@ const runSql = function (sql, params = []) {
             }
         })
     });
-}
+};
+
+/**
+ * 
+ * @param {string} sql SQL query to execute, may contain ? characters.
+ * @param {[*]} params Array of items to inject into ? characters.
+ * @return {Promise<[any]>} Promise resolving to the result set rows.
+ */
+const getRows = function (sql, params = []){
+    return new Promise((resolve, reject) => {
+        db.all(sql, params, (err, rows) => {
+            if (err) {
+                console.error('getRows() error running sql.');
+                console.error(err);
+                reject(err);
+            } else {
+                resolve(rows);
+            }
+        });
+    });
+};
 
 const createDb = function () {
     db = new sqlite3.Database(fileLoc, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE);
@@ -54,23 +74,43 @@ const createDb = function () {
     });
 };
 
+const openDb = function(){
+    db = new sqlite3.Database(fileLoc, sqlite3.OPEN_READWRITE);
+};
+
+/**Checks if DB is in Loki format.
+ * @returns {Promise<void>} Promise resolving if DB is in Loki format.
+ */
+const checkDb = function(){
+    console.log('TODO check DB.');
+    return Promise.resolve();
+};
+
+const getItemsList = function(){
+    return getRows('select id, name from item;')
+    .then(function(rows){
+        console.log(rows);
+        return rows;
+    });
+};
+
 class LokiFile {
     constructor(fileLocation) {
         fileLoc = fileLocation;
     };
 
     async init() {
-        console.log('initializing LokiFile');
-        console.log('checking for existence of', fileLoc);
         if (fs.existsSync(fileLoc)) {
-            console.log('opening', fileLoc);
-            //todo open it
+            openDb();
+            await checkDb();
         } else {
-            console.log('creating', fileLoc);
             await createDb(fileLoc);
-            console.log('finished creating.');
         }
     };
+
+    getItems() {
+        return getItemsList();
+    }
 };
 
 module.exports = LokiFile;
