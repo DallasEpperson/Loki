@@ -24,6 +24,8 @@ function main() {
         menuWindow.webContents.send('previouslyOpened', appData.getPreviouslyOpened());
     });
 
+    menuWindow.webContents.openDevTools(); //todo remove
+
     ipcMain.on('file-new-click', () => {
         console.log('file-new-click handler on main thread');
         let chosenNewFileLoc = dialog.showSaveDialogSync(menuWindow, {

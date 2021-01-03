@@ -27,7 +27,8 @@ h2 {
     width: 15em;
 }
 
-#file-buttons button {
+#file-buttons .button {
+    display: inline-block;
     width: 100%;
     background-color: var(--main-bg-color);
     color: var(--text-secondary-color);
@@ -38,7 +39,7 @@ h2 {
     text-align: left;
 }
 
-#file-buttons button:hover {
+#file-buttons .button:hover {
     background-color: var(--button-hover-color);
     color: var(--text-primary-color);
 }
