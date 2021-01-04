@@ -30,7 +30,6 @@ class AppDataStore extends Store {
     }
 
     save() {
-        console.log('Saving app data');
         this.savePreviouslyOpened();
     }
 };

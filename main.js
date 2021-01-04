@@ -6,20 +6,23 @@ const LokiFile = require('./LokiFile');
 const path = require('path');
 const Window = require('./Window');
 
+const { version } = require('./package.json');
+
 const appData = new AppDataStore({ name: 'Loki' });
 
 let mainWindow, menuWindow;
+/**
+ * @type LokiFile
+ */
+let currentlyOpenFile;
 
 const openFile = (fileName) => {
-    console.log('openFile', fileName);
-    let lokiFile = new LokiFile(fileName);
-    lokiFile.init().then(function(){
+    currentlyOpenFile = new LokiFile(fileName);
+    currentlyOpenFile.init().then(function(){
         appData.addPreviouslyOpened(fileName);
     }).then(function(){
-        return lokiFile.getItems();
+        return currentlyOpenFile.getItems();
     }).then(function(items){
-        console.log('items are');
-        console.log(items);
         mainWindow = new Window({
             file: path.join('renderer', 'main.html'),
             width: 800,
@@ -36,6 +39,7 @@ const openFile = (fileName) => {
 };
 
 function main() {
+    console.log(`Loki version ${version} starting`);
     //todo get window size from last invocation
     menuWindow = new Window({
         file: path.join('renderer', 'menu.html'),
@@ -53,27 +57,23 @@ function main() {
     });
 
     ipcMain.on('file-new-click', () => {
-        console.log('file-new-click handler on main thread');
         let chosenNewFileLoc = dialog.showSaveDialogSync(menuWindow, {
             title: 'Save Loki file',
             filters: [
                 { name: 'Loki File', extensions: ['loki'] }
             ]
         });
-        console.log('dialog returned with', chosenNewFileLoc);
         if(!chosenNewFileLoc) return;
 
         let ext = path.extname(chosenNewFileLoc);
         if (!ext) chosenNewFileLoc += '.loki';
         let lokiFile = new LokiFile(chosenNewFileLoc);
         lokiFile.init().then(function(){
-            console.log('main thread past loki file creation');
             openFile(chosenNewFileLoc);
         });
     });
 
     ipcMain.on('file-open-click', () => {
-        console.log('file-open-click handler on main thread');
         let openDiagResponse = dialog.showOpenDialogSync(menuWindow, {
             title: 'Open existing Loki file',
             filters: [
@@ -81,7 +81,6 @@ function main() {
             ],
             properties: ['openFile']
         });
-        console.log('dialog returned with', openDiagResponse);
         if(!openDiagResponse || !Array.isArray(openDiagResponse) || openDiagResponse.length < 1)
             return;
         
@@ -90,6 +89,14 @@ function main() {
 
     ipcMain.on('previous-file-open-click', (event, args) => {
         openFile(args.fileName);
+    });
+
+    ipcMain.on('item-details-get', (event, args) => {
+        console.log('Getting details for item', args.itemId);
+        currentlyOpenFile.getItem(args.itemId)
+        .then(function(details){
+            mainWindow.webContents.send('item-details-response', details);
+        });
     });
 
     ipcMain.on('exit-click', () => {
