@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html id="db-view">
 
 <head>
     <meta charset="UTF-8">
@@ -9,9 +9,23 @@
     <link rel="stylesheet" href="./css/font-awesome.min.css">
 </head>
 
-<body>
-    <h1>Main screen goes here</h1>
-
+<body id="db-view">
+    <div id="nav-header">
+        <div>Back</div>
+        <div>File Name</div>
+        <div>New</div>
+    </div>
+    <div id="main">
+        <div id="item-list-container">
+            <p>Items</p>
+            <ul id="item-list"></ul>
+        </div>
+        <div id="item">
+            <div>Container</div>
+            <div>Item details</div>
+            <div>Children</div>
+        </div>
+    </div>
 
     <script src="./main.js"></script>
 </body>

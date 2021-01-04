@@ -27,9 +27,9 @@ const openFile = (fileName) => {
             minWidth: 300,
             minHeight: 200
         });
-        //mainWindow.webContents.openDevTools();
+        mainWindow.webContents.openDevTools();
         mainWindow.once('show', () => {
-            mainWindow.webContents.send('dbLoaded', items);
+            mainWindow.webContents.send('item-list-updated', items);
             menuWindow.close();
         });
     });
