@@ -43,13 +43,13 @@ h2 {
     cursor: pointer;
 }
 
-#db-view #back i {
-    padding-right: 0.5em;
-}
-
 #db-view #main {
     display: flex;
     flex-grow: 1;
+}
+
+#db-view #nav-header i {
+    padding-right: 0.5em;
 }
 
 #db-view #pick-item {
@@ -97,7 +97,12 @@ h2 {
     justify-content: space-between;
 }
 
+#item-containers i {
+    padding-right: 0.5em;
+}
+
 #item-containers ul {
+    display: inline-block;
     list-style: none;
     margin: 0;
     padding: 0;
