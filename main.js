@@ -38,8 +38,7 @@ const openFile = (fileName) => {
     });
 };
 
-function main() {
-    console.log(`Loki version ${version} starting`);
+const showMenuWindow = () => {
     //todo get window size from last invocation
     menuWindow = new Window({
         file: path.join('renderer', 'menu.html'),
@@ -48,61 +47,72 @@ function main() {
         minWidth: 300,
         minHeight: 200
     });
-
     menuWindow.removeMenu();
-    //menuWindow.webContents.openDevTools();
-
     menuWindow.once('ready-to-show', () => {
         menuWindow.webContents.send('previouslyOpened', appData.getPreviouslyOpened());
     });
-
-    ipcMain.on('file-new-click', () => {
-        let chosenNewFileLoc = dialog.showSaveDialogSync(menuWindow, {
-            title: 'Save Loki file',
-            filters: [
-                { name: 'Loki File', extensions: ['loki'] }
-            ]
-        });
-        if(!chosenNewFileLoc) return;
-
-        let ext = path.extname(chosenNewFileLoc);
-        if (!ext) chosenNewFileLoc += '.loki';
-        let lokiFile = new LokiFile(chosenNewFileLoc);
-        lokiFile.init().then(function(){
-            openFile(chosenNewFileLoc);
-        });
-    });
-
-    ipcMain.on('file-open-click', () => {
-        let openDiagResponse = dialog.showOpenDialogSync(menuWindow, {
-            title: 'Open existing Loki file',
-            filters: [
-                { name: 'Loki File', extensions: ['loki'] }
-            ],
-            properties: ['openFile']
-        });
-        if(!openDiagResponse || !Array.isArray(openDiagResponse) || openDiagResponse.length < 1)
-            return;
-        
-        openFile(openDiagResponse[0]);
-    });
-
-    ipcMain.on('previous-file-open-click', (event, args) => {
-        openFile(args.fileName);
-    });
-
-    ipcMain.on('item-details-get', (event, args) => {
-        console.log('Getting details for item', args.itemId);
-        currentlyOpenFile.getItem(args.itemId)
-        .then(function(details){
-            mainWindow.webContents.send('item-details-response', details);
-        });
-    });
-
-    ipcMain.on('exit-click', () => {
-        menuWindow.close();
-    });
 };
+
+function main() {
+    console.log(`Loki version ${version} starting`);
+    showMenuWindow();
+};
+
+//#region Channel event handlers
+
+ipcMain.on('exit-click', () => {
+    menuWindow.close();
+});
+
+ipcMain.on('file-open-click', () => {
+    let openDiagResponse = dialog.showOpenDialogSync(menuWindow, {
+        title: 'Open existing Loki file',
+        filters: [
+            { name: 'Loki File', extensions: ['loki'] }
+        ],
+        properties: ['openFile']
+    });
+    if(!openDiagResponse || !Array.isArray(openDiagResponse) || openDiagResponse.length < 1)
+        return;
+    
+    openFile(openDiagResponse[0]);
+});
+
+ipcMain.on('file-new-click', () => {
+    let chosenNewFileLoc = dialog.showSaveDialogSync(menuWindow, {
+        title: 'Save Loki file',
+        filters: [
+            { name: 'Loki File', extensions: ['loki'] }
+        ]
+    });
+    if(!chosenNewFileLoc) return;
+
+    let ext = path.extname(chosenNewFileLoc);
+    if (!ext) chosenNewFileLoc += '.loki';
+    let lokiFile = new LokiFile(chosenNewFileLoc);
+    lokiFile.init().then(function(){
+        openFile(chosenNewFileLoc);
+    });
+});
+
+ipcMain.on('item-details-get', (event, args) => {
+    console.log('Getting details for item', args.itemId);
+    currentlyOpenFile.getItem(args.itemId)
+    .then(function(details){
+        mainWindow.webContents.send('item-details-response', details);
+    });
+});
+
+ipcMain.on('previous-file-open-click', (event, args) => {
+    openFile(args.fileName);
+});
+
+ipcMain.on('main-window-back', () => {
+    showMenuWindow();
+    mainWindow.close();
+});
+
+//#endregion
 
 app.on('ready', main);
 

@@ -3,6 +3,10 @@
 const { ipcRenderer } = require('electron');
 window.$ = window.jQuery = require('jquery');
 
+$('#back').on('click', ()=>{
+    ipcRenderer.send('main-window-back');
+});
+
 ipcRenderer.on('item-details-response', (_event, details) => {
     console.log('item-details-response', details);
     //TODO render main section of page
