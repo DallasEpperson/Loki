@@ -77,6 +77,27 @@ h2 {
     flex-grow: 1;
 }
 
+#item-containers a {
+    user-select: none;
+}
+
+#item-containers a::before {
+    content: '>';
+    padding: 0 0.25em;
+}
+
+#item-containers a:hover {
+    cursor: pointer;
+    text-decoration: underline;
+    color: var(--text-primary-color);
+}
+
+#item-containers a:last-child:hover {
+    cursor: unset;
+    text-decoration: unset;
+    color: unset;
+}
+
 #item-list {
     list-style-type: none;
     padding: 0;
