@@ -9,17 +9,18 @@ $('#back').on('click', ()=>{
 
 ipcRenderer.on('item-details-response', (_event, details) => {
     console.log('item-details-response', details);
+    $('#pick-item').hide();
+    $('#item').show();
     // Item containers
-    const containersDiv = $('#item-containers');
-    containersDiv.empty();
+    const containersList = $('#item-containers ul');
+    containersList.empty();
     if(details.parents && details.parents.length > 0){
         details.parents.sort((a,b) => {return b.level - a.level})
         .forEach(parent => {
-            containersDiv.append(`<a data-id="${parent.id}">${parent.name}</a>`);
+            containersList.append(`<li data-id="${parent.id}">${parent.name}</li>`);
         });
     }
-    containersDiv.append(`<a>${details.name}</a>`);
-    $('#item-containers a').on('click', function(){
+    $('#item-containers li').on('click', function(){
         const itemId = parseInt($(this).data('id'));
         if(!itemId) return;
         ipcRenderer.send('item-details-get', {itemId: itemId});

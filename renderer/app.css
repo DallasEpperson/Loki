@@ -52,6 +52,11 @@ h2 {
     flex-grow: 1;
 }
 
+#db-view #pick-item {
+    font-size: 2em;
+    margin: 2em auto;
+}
+
 #file-buttons {
     flex-shrink: 0;
     display: flex;
@@ -84,27 +89,34 @@ h2 {
 
 #item {
     flex-grow: 1;
+    margin: 0.5em;
 }
 
-#item-containers a {
+#item-containers {
+    display: flex;
+    justify-content: space-between;
+}
+
+#item-containers ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+#item-containers li {
+    display: inline-block;
     user-select: none;
 }
 
-#item-containers a::before {
+#item-containers li::after {
     content: '>';
     padding: 0 0.25em;
 }
 
-#item-containers a:hover {
+#item-containers li:hover {
     cursor: pointer;
     text-decoration: underline;
     color: var(--text-primary-color);
-}
-
-#item-containers a:last-child:hover {
-    cursor: unset;
-    text-decoration: unset;
-    color: unset;
 }
 
 #item-list {
