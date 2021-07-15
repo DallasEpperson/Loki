@@ -28,6 +28,9 @@ ipcRenderer.on('item-details-response', (_event, details) => {
 
     // Item main
     $('#item-main h1').text(details.name);
+
+    // Children
+    $('#children').text(`Contains ${details.children.length} objects`);
 });
 
 ipcRenderer.on('item-list-updated', (_event, items) => {

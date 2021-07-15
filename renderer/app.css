@@ -114,6 +114,7 @@ h2 {
 }
 
 #item-containers li::after {
+    display: inline-block;
     content: '>';
     padding: 0 0.25em;
 }
@@ -122,6 +123,10 @@ h2 {
     cursor: pointer;
     text-decoration: underline;
     color: var(--text-primary-color);
+}
+
+#item-containers li:hover::after {
+    text-decoration: none;
 }
 
 #item-list {
