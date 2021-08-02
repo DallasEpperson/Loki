@@ -26,6 +26,37 @@ h2 {
     color: var(--text-secondary-color);
 }
 
+#db-view {
+    height: 100%;
+}
+
+#db-view body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    color: var(--text-secondary-color);
+}
+
+#db-view #back:hover {
+    color: var(--text-primary-color);
+    cursor: pointer;
+}
+
+#db-view #main {
+    display: flex;
+    flex-grow: 1;
+}
+
+#db-view #nav-header i {
+    padding-right: 0.5em;
+}
+
+#db-view #pick-item {
+    font-size: 2em;
+    margin: 2em auto;
+}
+
 #file-buttons {
     flex-shrink: 0;
     display: flex;
@@ -54,6 +85,78 @@ h2 {
 
 #file-operations {
     display: flex;
+}
+
+#item {
+    flex-grow: 1;
+    margin: 0.5em;
+}
+
+#item-containers {
+    display: flex;
+    justify-content: space-between;
+}
+
+#item-containers i {
+    padding-right: 0.5em;
+}
+
+#item-containers ul {
+    display: inline-block;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+#item-containers li {
+    display: inline-block;
+    user-select: none;
+}
+
+#item-containers li::after {
+    display: inline-block;
+    content: '>';
+    padding: 0 0.25em;
+}
+
+#item-containers li:hover {
+    cursor: pointer;
+    text-decoration: underline;
+    color: var(--text-primary-color);
+}
+
+#item-containers li:hover::after {
+    text-decoration: none;
+}
+
+#item-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+#item-list li:hover {
+    color: var(--text-primary-color);
+    cursor: pointer;
+}
+
+#item-list-container {
+    border-right: 1px solid var(--button-border-color);
+    padding: 1em;
+}
+
+#item-list-container p {
+    margin: 0;
+}
+
+#item-main h1 {
+    text-align: center;
+}
+
+#nav-header {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--button-border-color);
+    padding: 1em;
 }
 
 #recent-files {

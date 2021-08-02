@@ -4,7 +4,6 @@ const { ipcRenderer } = require('electron');
 window.$ = window.jQuery = require('jquery');
 
 ipcRenderer.on('previouslyOpened', (event, previouslyOpened) => {
-    console.log('Received previouslyOpened event', previouslyOpened);
     var listElement = $('#recent-file-list');
     listElement.empty();
     for (let i = 0; i < previouslyOpened.length; i++) {
@@ -15,19 +14,16 @@ ipcRenderer.on('previouslyOpened', (event, previouslyOpened) => {
         listElement.append(`<li data-id="${i}"><a>${fileName}</a><span>${filePath}</span></li>`);
     }
     $('#recent-file-list a').on('click', function(){
-        const recentFileId = $(this).closest('li').data('id');
-        console.log('user clicked recent file ', recentFileId);
-        //TODO open it
+        const recentFileId = parseInt($(this).closest('li').data('id'));
+        ipcRenderer.send('previous-file-open-click', {fileName: previouslyOpened[recentFileId]});
     });
 });
 
 $('#btnOpenFile').on('click', function(){
-    console.log('sending file-open-click event');
     ipcRenderer.send('file-open-click');
 });
 
 $('#btnNewFile').on('click', function(){
-    console.log('sending file-new-click event');
     ipcRenderer.send('file-new-click');
 });
 
