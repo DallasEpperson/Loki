@@ -87,7 +87,10 @@ ipcMain.on('file-new-click', () => {
             { name: 'Loki File', extensions: ['loki'] }
         ]
     });
-    if(!chosenNewFileLoc) return;
+    if(!chosenNewFileLoc){
+        menuWindow.webContents.send('file-new-return');
+        return;
+    }
 
     let ext = path.extname(chosenNewFileLoc);
     if (!ext) chosenNewFileLoc += '.loki';
