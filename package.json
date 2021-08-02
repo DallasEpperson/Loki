@@ -4,6 +4,7 @@
   "description": "Loki is a tool to help me keep track of all my physical things",
   "main": "main.js",
   "scripts": {
+    "compile-styles": "node-sass --output-style expanded --source-map true renderer/styles.scss renderer/app.css",
     "start": "electron ."
   },
   "repository": {
@@ -18,7 +19,8 @@
   },
   "homepage": "https://github.com/DallasEpperson/Loki#readme",
   "devDependencies": {
-    "electron": "^11.4.10"
+    "electron": "^11.4.10",
+    "node-sass": "^6.0.1"
   },
   "dependencies": {
     "electron-store": "^6.0.1",
