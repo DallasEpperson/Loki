@@ -72,8 +72,10 @@ ipcMain.on('file-open-click', () => {
         ],
         properties: ['openFile']
     });
-    if(!openDiagResponse || !Array.isArray(openDiagResponse) || openDiagResponse.length < 1)
+    if(!openDiagResponse || !Array.isArray(openDiagResponse) || openDiagResponse.length < 1) {
+        menuWindow.webContents.send('file-open-return');
         return;
+    }
     
     openFile(openDiagResponse[0]);
 });
