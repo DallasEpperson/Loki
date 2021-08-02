@@ -102,3 +102,9 @@ dist
 
 # TernJS port file
 .tern-port
+
+### Specific to Loki
+
+# Styles build by scss
+renderer/app.css
+renderer/app.css.map

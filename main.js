@@ -72,8 +72,10 @@ ipcMain.on('file-open-click', () => {
         ],
         properties: ['openFile']
     });
-    if(!openDiagResponse || !Array.isArray(openDiagResponse) || openDiagResponse.length < 1)
+    if(!openDiagResponse || !Array.isArray(openDiagResponse) || openDiagResponse.length < 1) {
+        menuWindow.webContents.send('file-open-return');
         return;
+    }
     
     openFile(openDiagResponse[0]);
 });
@@ -85,7 +87,10 @@ ipcMain.on('file-new-click', () => {
             { name: 'Loki File', extensions: ['loki'] }
         ]
     });
-    if(!chosenNewFileLoc) return;
+    if(!chosenNewFileLoc){
+        menuWindow.webContents.send('file-new-return');
+        return;
+    }
 
     let ext = path.extname(chosenNewFileLoc);
     if (!ext) chosenNewFileLoc += '.loki';

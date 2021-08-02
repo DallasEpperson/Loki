@@ -19,11 +19,21 @@ ipcRenderer.on('previouslyOpened', (event, previouslyOpened) => {
     });
 });
 
+ipcRenderer.on('file-open-return', () => {
+    $('body').removeClass('loading');
+});
+
+ipcRenderer.on('file-new-return', () => {
+    $('body').removeClass('loading');
+});
+
 $('#btnOpenFile').on('click', function(){
+    $('body').addClass('loading');
     ipcRenderer.send('file-open-click');
 });
 
 $('#btnNewFile').on('click', function(){
+    $('body').addClass('loading');
     ipcRenderer.send('file-new-click');
 });
 
