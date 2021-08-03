@@ -20,20 +20,20 @@ ipcRenderer.on('previouslyOpened', (event, previouslyOpened) => {
 });
 
 ipcRenderer.on('file-open-return', () => {
-    $('body').removeClass('loading');
+    $('body').removeClass('blurred');
 });
 
 ipcRenderer.on('file-new-return', () => {
-    $('body').removeClass('loading');
+    $('body').removeClass('blurred');
 });
 
 $('#btnOpenFile').on('click', function(){
-    $('body').addClass('loading');
+    $('body').addClass('blurred');
     ipcRenderer.send('file-open-click');
 });
 
 $('#btnNewFile').on('click', function(){
-    $('body').addClass('loading');
+    $('body').addClass('blurred');
     ipcRenderer.send('file-new-click');
 });
 

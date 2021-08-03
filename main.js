@@ -16,25 +16,22 @@ let mainWindow, menuWindow;
  */
 let currentlyOpenFile;
 
-const openFile = (fileName) => {
+const openFile = async (fileName) => {
     currentlyOpenFile = new LokiFile(fileName);
-    currentlyOpenFile.init().then(function(){
-        appData.addPreviouslyOpened(fileName);
-    }).then(function(){
-        return currentlyOpenFile.getItems();
-    }).then(function(items){
-        mainWindow = new Window({
-            file: path.join('renderer', 'main.html'),
-            width: 800,
-            height: 600,
-            minWidth: 300,
-            minHeight: 200
-        });
-        mainWindow.webContents.openDevTools();
-        mainWindow.once('show', () => {
-            mainWindow.webContents.send('item-list-updated', items);
-            menuWindow.close();
-        });
+    await currentlyOpenFile.init();
+    appData.addPreviouslyOpened(fileName);
+    let items = await currentlyOpenFile.getItems();
+    mainWindow = new Window({
+        file: path.join('renderer', 'main.html'),
+        width: 800,
+        height: 600,
+        minWidth: 300,
+        minHeight: 200
+    });
+    mainWindow.webContents.openDevTools();
+    mainWindow.once('show', () => {
+        mainWindow.webContents.send('item-list-updated', items);
+        menuWindow.close();
     });
 };
 
@@ -48,6 +45,7 @@ const showMenuWindow = () => {
         minHeight: 200
     });
     menuWindow.removeMenu();
+    menuWindow.webContents.openDevTools();
     menuWindow.once('ready-to-show', () => {
         menuWindow.webContents.send('previouslyOpened', appData.getPreviouslyOpened());
     });
@@ -100,21 +98,32 @@ ipcMain.on('file-new-click', () => {
     });
 });
 
-ipcMain.on('item-details-get', (event, args) => {
+ipcMain.on('item-details-get', async (_event, args) => {
     console.log('Getting details for item', args.itemId);
-    currentlyOpenFile.getItem(args.itemId)
-    .then(function(details){
-        mainWindow.webContents.send('item-details-response', details);
-    });
+    let details = await currentlyOpenFile.getItem(args.itemId);
+    mainWindow.webContents.send('item-details-response', details);
 });
 
-ipcMain.on('previous-file-open-click', (event, args) => {
+ipcMain.on('previous-file-open-click', (_event, args) => {
     openFile(args.fileName);
 });
 
 ipcMain.on('main-window-back', () => {
     showMenuWindow();
     mainWindow.close();
+});
+
+//#endregion
+
+//#region Main window event handlers
+
+ipcMain.on('create-item', async (_event, args) => {
+    console.log('create-item msg received');
+    console.log(args);
+    let newItemId = await currentlyOpenFile.addItem(args);
+    let items = await currentlyOpenFile.getItems();
+    mainWindow.webContents.send('item-list-updated', items);
+    mainWindow.webContents.send('item-created', newItemId);
 });
 
 //#endregion

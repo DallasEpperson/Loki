@@ -7,6 +7,33 @@ $('#back').on('click', ()=>{
     ipcRenderer.send('main-window-back');
 });
 
+$('#btnNewItem').on('click', ()=>{
+    $('#content').addClass('blurred');
+    $('#modal-new-item').addClass('modal-open');
+    $('#new-item-name').trigger('focus');
+});
+
+$('#btnCancelNewItem').on('click', ()=>{
+    $('#content').removeClass('blurred');
+    $('#modal-new-item').removeClass('modal-open');
+});
+
+$('#btnSaveNewItem').on('click', ()=>{
+    //todo ensure all required fields are present
+    //todo animation on the save button?
+    let newItem = {
+        name: $('#new-item-name').val()
+    };
+    ipcRenderer.send('create-item', newItem);
+});
+
+ipcRenderer.on('item-created', (_event, newItemId)=>{
+    //todo cancel animation on the save button?
+    $('#content').removeClass('blurred');
+    $('#modal-new-item').removeClass('modal-open');
+    console.log('item created', newItemId);
+});
+
 ipcRenderer.on('item-details-response', (_event, details) => {
     console.log('item-details-response', details);
     $('#pick-item').hide();

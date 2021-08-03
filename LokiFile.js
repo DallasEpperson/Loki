@@ -44,19 +44,16 @@ const getRows = function (sql, params = []){
     });
 };
 
-const createDb = function () {
+const createDb = async function () {
     db = new sqlite3.Database(fileLoc, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE);
-    return Promise.resolve()
-    .then(function(){
-        return runSql(`
+    await runSql(`
             CREATE TABLE IF NOT EXISTS 'item' (
                 'id' INTEGER NOT NULL DEFAULT 0 PRIMARY KEY AUTOINCREMENT UNIQUE,
                 'containerId' INTEGER,
                 'name' TEXT NOT NULL,
                 FOREIGN KEY('containerId') REFERENCES 'item' )
         `);
-    }).then(function(){
-        return runSql(`
+    await runSql(`
             CREATE TABLE IF NOT EXISTS 'item_property' (
                 'id' INTEGER NOT NULL DEFAULT 0 PRIMARY KEY AUTOINCREMENT UNIQUE,
                 'propertyId' INTEGER NOT NULL,
@@ -65,13 +62,11 @@ const createDb = function () {
                 FOREIGN KEY('propertyId') REFERENCES 'property'('id'),
                 FOREIGN KEY('itemId') REFERENCES 'item'('id') )
         `);
-    }).then(function(){
-        return runSql(`
+    return await runSql(`
             CREATE TABLE IF NOT EXISTS 'property' (
                 'id' INTEGER NOT NULL DEFAULT 0 PRIMARY KEY AUTOINCREMENT UNIQUE,
                 'name' TEXT NOT NULL )
         `);
-    });
 };
 
 const openDb = function(){
@@ -100,17 +95,29 @@ class LokiFile {
         }
     };
 
+    /**Add new item to the database.
+     * @param {{
+     *  name: string
+     * }} item Item to insert.
+     * @returns {Promise<number>} Promise resolving to the ID of the new item.
+     */
+    async addItem(item){
+        let sqlQuery = `
+            INSERT INTO 'item' ('name') VALUES (?);
+            SELECT id FROM 'item' WHERE ROWID = last_insert_rowid();`;
+        let sqlResult = await getRows(sqlQuery, [item.name]);
+        return;// sqlResult[0][0].id;
+        //TODO figure out why sqlResult is always empty array. Perhaps db.all only returns first result set.
+    };
+
     /**Get all items in the DB.
      * @returns {Promise<[{
      *  id: number,
      *  name: string
      * }]>} Promise resolving to array of items.
      */
-    getItems() {
-        return getRows('select id, name from item;')
-        .then(function(rows){
-            return rows;
-        });
+    async getItems() {
+        return await getRows('select id, name from item;');
     };
 
     /**Get details of an item.
