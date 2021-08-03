@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html id="view-menu">
 
 <head>
     <meta charset="UTF-8">
@@ -10,19 +10,20 @@
 </head>
 
 <body>
-    <h1>Loki</h1>
-    <div id="file-operations">
-        <div id="file-buttons">
-            <a class="button" id="btnNewFile"><i class="fa fa-plus-square-o"></i>Create a new file</a>
-            <a class="button" id="btnOpenFile"><i class="fa fa-folder-open-o"></i>Open an existing file</a>
-            <a class="button" id="btnExit"><i class="fa fa-sign-out"></i>Exit</a>
-        </div>
-        <div id="recent-files">
-            <h2>Recent Files</h2>
-            <ul id="recent-file-list"></ul>
+    <div id="content">
+        <h1>Loki</h1>
+        <div id="file-operations">
+            <div id="file-buttons">
+                <a class="button" id="btnNewFile"><i class="fa fa-plus-square-o"></i>Create a new file</a>
+                <a class="button" id="btnOpenFile"><i class="fa fa-folder-open-o"></i>Open an existing file</a>
+                <a class="button" id="btnExit"><i class="fa fa-sign-out"></i>Exit</a>
+            </div>
+            <div id="recent-files">
+                <h2>Recent Files</h2>
+                <ul id="recent-file-list"></ul>
+            </div>
         </div>
     </div>
-
 
     <script src="./menu.js"></script>
 </body>

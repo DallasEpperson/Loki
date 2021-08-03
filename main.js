@@ -24,12 +24,12 @@ const openFile = async (fileName) => {
     mainWindow = new Window({
         file: path.join('renderer', 'main.html'),
         width: 800,
-            height: 600,
-            minWidth: 300,
-            minHeight: 200
-        });
-        mainWindow.webContents.openDevTools();
-        mainWindow.once('show', () => {
+        height: 600,
+        minWidth: 300,
+        minHeight: 200
+    });
+    mainWindow.webContents.openDevTools();
+    mainWindow.once('show', () => {
         mainWindow.webContents.send('item-list-updated', items);
         menuWindow.close();
     });
@@ -45,6 +45,7 @@ const showMenuWindow = () => {
         minHeight: 200
     });
     menuWindow.removeMenu();
+    menuWindow.webContents.openDevTools();
     menuWindow.once('ready-to-show', () => {
         menuWindow.webContents.send('previouslyOpened', appData.getPreviouslyOpened());
     });
@@ -110,6 +111,19 @@ ipcMain.on('previous-file-open-click', (_event, args) => {
 ipcMain.on('main-window-back', () => {
     showMenuWindow();
     mainWindow.close();
+});
+
+//#endregion
+
+//#region Main window event handlers
+
+ipcMain.on('create-item', async (_event, args) => {
+    console.log('create-item msg received');
+    console.log(args);
+    let newItemId = await currentlyOpenFile.addItem(args);
+    let items = await currentlyOpenFile.getItems();
+    mainWindow.webContents.send('item-list-updated', items);
+    mainWindow.webContents.send('item-created', newItemId);
 });
 
 //#endregion

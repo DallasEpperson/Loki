@@ -95,6 +95,21 @@ class LokiFile {
         }
     };
 
+    /**Add new item to the database.
+     * @param {{
+     *  name: string
+     * }} item Item to insert.
+     * @returns {Promise<number>} Promise resolving to the ID of the new item.
+     */
+    async addItem(item){
+        let sqlQuery = `
+            INSERT INTO 'item' ('name') VALUES (?);
+            SELECT id FROM 'item' WHERE ROWID = last_insert_rowid();`;
+        let sqlResult = await getRows(sqlQuery, [item.name]);
+        return;// sqlResult[0][0].id;
+        //TODO figure out why sqlResult is always empty array. Perhaps db.all only returns first result set.
+    };
+
     /**Get all items in the DB.
      * @returns {Promise<[{
      *  id: number,
