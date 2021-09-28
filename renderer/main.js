@@ -99,13 +99,15 @@ Loki.RenderItemList = () => {
 Loki.RenderContainerOptions = (forItem) => {
     const containerOptionList = $('#container-options');
     containerOptionList.empty();
+    containerOptionList.append(`<li>No Container</li>`);
     Loki.items.forEach(potentialContainer => {
         if(forItem.id === potentialContainer.id) return;
         if(forItem.children.filter(child => {return child.id === potentialContainer.id}).length > 0) return;
         containerOptionList.append(`<li data-id="${potentialContainer.id}">${potentialContainer.name}</li>`);
     });
     $('#container-options li').on('click', function(){
-        const containerId = parseInt($(this).data('id'));
+        let containerId = parseInt($(this).data('id'));
+        if (isNaN(containerId)) containerId = null;
         ipcRenderer.send('item-place-into-container', {itemId: forItem.id, containerId: containerId});
     });
     $('#content').addClass('blurred');
@@ -132,3 +134,9 @@ ipcRenderer.on('item-list-updated', (_event, items) => {
     });
     Loki.RenderItemList();
 });
+
+//todo style the Choose Container modal
+//todo make Choose Container modal only as wide as it has to be
+//todo style container options list
+//todo ensure container options list scrolls if it gets too long
+//todo give No Container a special style
