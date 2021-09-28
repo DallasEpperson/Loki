@@ -95,12 +95,12 @@ Loki.RenderItemList = () => {
  * }} forItem 
  */
 Loki.RenderContainerOptions = (forItem) => {
-    //todo ensure children are not shown
     const containerOptionList = $('#container-options');
     containerOptionList.empty();
-    Loki.items.forEach(item => {
-        if(forItem.id === item.id) return;
-        containerOptionList.append(`<li data-id="${item.id}">${item.name}</li>`);
+    Loki.items.forEach(potentialContainer => {
+        if(forItem.id === potentialContainer.id) return;
+        if(forItem.children.filter(child => {return child.id === potentialContainer.id}).length > 0) return;
+        containerOptionList.append(`<li data-id="${potentialContainer.id}">${potentialContainer.name}</li>`);
     });
     //todo click handler
     $('#content').addClass('blurred');
