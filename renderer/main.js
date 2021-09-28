@@ -28,7 +28,7 @@ $('#btnSaveNewItem').on('click', ()=>{
     ipcRenderer.send('create-item', newItem);
 });
 
-$('#btnPickContainer').on('click', ()=>{
+$('#btnShowContainerOptions').on('click', ()=>{
     Loki.RenderContainerOptions(Loki.currentItem);
 });
 
@@ -50,6 +50,8 @@ $('#btnCancelPickContainer').on('click', ()=>{
  */
 Loki.RenderItem = (item) => {
     $('#pick-item').hide();
+    $('#modals .modal').removeClass('modal-open');
+    $('#content').removeClass('blurred');
     $('#item').show();
 
     // Item containers
@@ -102,7 +104,10 @@ Loki.RenderContainerOptions = (forItem) => {
         if(forItem.children.filter(child => {return child.id === potentialContainer.id}).length > 0) return;
         containerOptionList.append(`<li data-id="${potentialContainer.id}">${potentialContainer.name}</li>`);
     });
-    //todo click handler
+    $('#container-options li').on('click', function(){
+        const containerId = parseInt($(this).data('id'));
+        ipcRenderer.send('item-place-into-container', {itemId: forItem.id, containerId: containerId});
+    });
     $('#content').addClass('blurred');
     $('#modal-pick-container').addClass('modal-open');
 };

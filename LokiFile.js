@@ -198,6 +198,16 @@ class LokiFile {
             };
         });
     };
+
+    /**Place item into a container.
+     * @param {number} itemId ID of the child item.
+     * @param {number} containerId ID of the container item.
+     * @returns {Promise<void>} Promise resolving when DB operation has completed.
+     */
+    async setContainer(itemId, containerId){
+        let sqlQuery = `UPDATE 'item' SET containerId = ? where id = ?`;
+        return await runSql(sqlQuery, [containerId, itemId]);
+    }
 };
 
 module.exports = LokiFile;

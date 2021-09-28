@@ -126,6 +126,15 @@ ipcMain.on('create-item', async (_event, args) => {
     mainWindow.webContents.send('item-created', newItemId);
 });
 
+ipcMain.on('item-place-into-container', async (_event, args) => {
+    console.log('item-place-into-container msg received');
+    console.log(args);
+    await currentlyOpenFile.setContainer(args.itemId, args.containerId);
+    console.log('Getting details for item', args.itemId);
+    let details = await currentlyOpenFile.getItem(args.itemId);
+    mainWindow.webContents.send('item-details-response', details);
+});
+
 //#endregion
 
 app.on('ready', main);
